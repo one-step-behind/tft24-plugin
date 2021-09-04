@@ -88,7 +88,8 @@ ControllerVolumioDisplay.prototype.getUIConfig = function() {
       uiconf.sections[0].content[0].value = self.config.get('gpio_dc');
       uiconf.sections[0].content[1].value = self.config.get('gpio_rst');
       uiconf.sections[0].content[2].value = self.config.get('gpio_led');
-      uiconf.sections[0].content[3].value = self.config.get('debugging');
+      uiconf.sections[0].content[3].value = self.config.get('ups');
+      uiconf.sections[0].content[4].value = self.config.get('debugging');
 
       uiconf.sections[1].content[0].value.value = self.config.get('display_fontface').toString();
       uiconf.sections[1].content[0].value.label = self.config.get('display_fontface').toString();
@@ -238,6 +239,7 @@ ControllerVolumioDisplay.prototype.updateConnectionConfig = function(data) {
   self.config.set('gpio_dc', self.tryParse(data['gpio_dc'], 0));
   self.config.set('gpio_rst', self.tryParse(data['gpio_rst'], 0));
   self.config.set('gpio_led', self.tryParse(data['gpio_led'], 0));
+  self.config.set('ups', data['ups']);
   self.config.set('debugging', data['debugging']);
   self.commandRouter.pushToastMessage('success', "Successfully saved connection settings");
 

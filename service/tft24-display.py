@@ -45,11 +45,6 @@ lineHeightBig = 20
 textSizeHuge = 40
 lineGap = 8
 
-# UPS Device
-ups_device_address = 0x36 # UPS HAT Pro: 0x62; X750: 0x36
-ups_i2c_port = 1  # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1)
-ups_bus = SMBus(ups_i2c_port)
-
 # anything else
 sleepDelayPlay = 2 # in seconds
 sleepDelayInitial = 5 # in seconds
@@ -80,8 +75,6 @@ textTime = ''
 textArtist = ''
 textTitle = ''
 textAlbum = ''
-upsCapacityInt = 0
-lastUpsCapacityInt = 0
 lastNetwork = ''
 iface = None
 ipaddress = None
@@ -113,7 +106,17 @@ colorSongtitle = (255, 255, 255) #(220, 160, 25)
 colorStatus = (180, 180, 180)
 colorTime = (255, 255, 255)
 colorTimebar = (180, 110, 6)
+
+# Show UPS info
+showUpsInfo = False
 # =============================================================================
+
+# UPS Device
+ups_device_address = 0x36 # UPS HAT Pro: 0x62; X750: 0x36
+ups_i2c_port = 1  # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1)
+ups_bus = SMBus(ups_i2c_port)
+upsCapacityInt = 0
+lastUpsCapacityInt = 0
 
 # Some precalculations
 textTopSongDetailsAlbum = textTopSongDetails
@@ -121,7 +124,7 @@ textTopSongDetailsArtist = textTopSongDetailsAlbum + (textSizeNormal * 2) + 2
 textTopSongDetailsTitle = textTopSongDetailsArtist + (textSizeNormal * 2) + 2
 
 def initDisplay():
-    global debugOutput, draw, TFT, GPIO_DC, GPIO_RST, GPIO_LED, displayLandscape, coverFullscreen, coverSize
+    global debugOutput, draw, TFT, GPIO_DC, GPIO_RST, GPIO_LED, showUpsInfo, displayLandscape, coverFullscreen, coverSize
     global coverTransparency, colorAlbum, colorArtist, colorSongtitle, colorStatus, colorTime, colorTimebar
 
     # read config from within plugins file
@@ -133,6 +136,7 @@ def initDisplay():
             GPIO_DC = int(config['gpio_dc']['value'])
             GPIO_RST = int(config['gpio_rst']['value'])
             GPIO_LED = int(config['gpio_led']['value'])
+            showUpsInfo = bool(config['ups']['value'])
             debugOutput = bool(config['debugging']['value'])
 
             setFonts(str(config['display_fontface']['value']))
@@ -204,49 +208,6 @@ def getNetworkIp():
     else:
         iface = 'None'
         ipaddress = 'unknown'
-
-# Read UPS capacity
-def readCapacity():
-    read = ups_bus.read_word_data(ups_device_address, 4)
-    swapped = unpack("<H", pack(">H", read))[0]
-    capacity = (swapped / 256)
-    return capacity
-
-# Read UPS Voltage
-def readVoltage():
-    read = ups_bus.read_word_data(ups_device_address, 2)
-    swapped = unpack("<H", pack(">H", read))[0]
-    voltage = swapped * 1.25 /1000/16
-    return voltage
-
-# Read UPS status
-def readStatus():
-    read = ups_bus.read_word_data(ups_device_address, 0x14)
-    return unpack("<H", pack(">H", read))[0]
-
-# Draw battery symbol depending on capacity percentage
-def drawCapacitySymbol(percent):
-    status = readStatus()
-
-    debug('=== BATTERY SYMBOL')
-
-    left = displayMargin + (0 if displayLandscape else coverSize)
-    top = (TFT.width if displayLandscape else TFT.height) - 15
-
-    if status < 1024:
-        draw.pasteimage(currentDir + "/img/battery-horizontal-charging.png", (left, top), True)
-        debug('AC Power Connected 3A Charging')
-    else:
-        debug('No power connected')
-        imagePercent = 100
-
-        if percent >= 0 and percent < 25:
-            imagePercent = 25
-        elif percent >= 25 and percent < 50:
-            imagePercent = 50
-        elif percent >= 50 and percent < 75:
-            imagePercent = 75
-        draw.pasteimage(currentDir + "/img/battery-horizontal-" + str(imagePercent) + ".png", (left, top), True)
 
 def getTemperature():
     cpu = CPUTemperature()
@@ -503,7 +464,7 @@ class FilestreamInfo:
     def __init__(self):
         self.fileData = ''
         self.valueLeft = displayMargin + (0 if displayLandscape else coverSize)
-        self.valueTop = ((TFT.width if displayLandscape else TFT.height) - (displayMargin *3) - (textSizeSmall *3)) + 6
+        self.valueTop = ((TFT.width if displayLandscape else TFT.height) - (displayMargin * (3 if showUpsInfo else 2)) - (textSizeSmall * (3 if showUpsInfo else 2))) + (6 if showUpsInfo else 3)
         self.width = (237 if displayLandscape else TFT.width) - 1
         self.view()
 
@@ -546,7 +507,7 @@ class NetworkInfo:
     def __init__(self):
         self.ip = getNetworkIp()
         self.valueLeft = displayMargin + (0 if displayLandscape else coverSize)
-        self.valueTop = ((TFT.width if displayLandscape else TFT.height) - (displayMargin *2) - (textSizeSmall *2)) + 3
+        self.valueTop = ((TFT.width if displayLandscape else TFT.height) - (displayMargin * (2 if showUpsInfo else 1)) - (textSizeSmall * (2 if showUpsInfo else 1))) + (3 if showUpsInfo else 0)
         self.width = (237 if displayLandscape else TFT.width) - 1
         self.view()
 
@@ -565,16 +526,17 @@ class NetworkInfo:
 # UPS capacity icon and text
 class BatteryInfo():
     def __init__(self):
-        self.cpuTemperatureInt = getTemperature()
-        self.upsVoltageInt = readVoltage()
-        self.lastUpsCapacityInt = lastUpsCapacityInt
+        if showUpsInfo:
+            self.cpuTemperatureInt = getTemperature()
+            self.upsVoltageInt = readVoltage()
+            self.lastUpsCapacityInt = lastUpsCapacityInt
 
-        self.valueLeft = displayMargin + (0 if displayLandscape else coverSize)
-        self.valueTop = ((TFT.width if displayLandscape else TFT.height) - displayMargin - textSizeSmall)
-        self.width = (237 if displayLandscape else TFT.width) - 1
+            self.valueLeft = displayMargin + (0 if displayLandscape else coverSize)
+            self.valueTop = ((TFT.width if displayLandscape else TFT.height) - displayMargin - textSizeSmall)
+            self.width = (237 if displayLandscape else TFT.width) - 1
 
-        if self.lastUpsCapacityInt != upsCapacityInt:
-            self.view()
+            if self.lastUpsCapacityInt != upsCapacityInt:
+                self.view()
 
     def view(self):
         debug('=== BATTERY INFO')
@@ -588,6 +550,48 @@ class BatteryInfo():
 
         lastUpsCapacityInt = upsCapacityInt
 
+# Read UPS capacity
+def readCapacity():
+    read = ups_bus.read_word_data(ups_device_address, 4)
+    swapped = unpack("<H", pack(">H", read))[0]
+    capacity = (swapped / 256)
+    return capacity
+
+# Read UPS Voltage
+def readVoltage():
+    read = ups_bus.read_word_data(ups_device_address, 2)
+    swapped = unpack("<H", pack(">H", read))[0]
+    voltage = swapped * 1.25 /1000/16
+    return voltage
+
+# Read UPS status
+def readStatus():
+    read = ups_bus.read_word_data(ups_device_address, 0x14)
+    return unpack("<H", pack(">H", read))[0]
+
+# Draw battery symbol depending on capacity percentage
+def drawCapacitySymbol(percent):
+    status = readStatus()
+
+    debug('=== BATTERY SYMBOL')
+
+    left = displayMargin + (0 if displayLandscape else coverSize)
+    top = (TFT.width if displayLandscape else TFT.height) - 15
+
+    if status < 1024:
+        draw.pasteimage(currentDir + "/img/battery-horizontal-charging.png", (left, top), True)
+        debug('AC Power Connected 3A Charging')
+    else:
+        debug('No power connected')
+        imagePercent = 100
+
+        if percent >= 0 and percent < 25:
+            imagePercent = 25
+        elif percent >= 25 and percent < 50:
+            imagePercent = 50
+        elif percent >= 50 and percent < 75:
+            imagePercent = 75
+        draw.pasteimage(currentDir + "/img/battery-horizontal-" + str(imagePercent) + ".png", (left, top), True)
 
 # ==========================================
 
@@ -636,12 +640,14 @@ def display(name, delay, run_event):
             debug("running display thread")
 
             volumioStatus = JsonLoad(tmpVolumioStatus)
-            upsCapacityInt = readCapacity()
 
-            if upsCapacityInt > 100:
-                upsCapacityInt = 100
+            if showUpsInfo:
+                upsCapacityInt = readCapacity()
 
-            if volumioStatus != lastVolumioStatus or upsCapacityInt != lastUpsCapacityInt:
+                if upsCapacityInt > 100:
+                    upsCapacityInt = 100
+
+            if volumioStatus != lastVolumioStatus or (showUpsInfo and upsCapacityInt != lastUpsCapacityInt):
                 if volumioStatus.get('status'):
                     textStatus = str(volumioStatus['status'])
                     textVolume = str(volumioStatus.get('volume'))

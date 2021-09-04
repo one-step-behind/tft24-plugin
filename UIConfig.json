@@ -20,6 +20,7 @@
           "gpio_dc",
           "gpio_rst",
           "gpio_led",
+          "ups",
           "debugging"
         ]
       },
@@ -50,6 +51,13 @@
           "doc": "TRANSLATE.CONNECTION.GPIO_LED_DOC",
           "description": "TRANSLATE.CONNECTION.GPIO_LED_DESCRIPTION",
           "value": 12
+        },
+        {
+          "id": "ups",
+          "element": "switch",
+          "label": "TRANSLATE.CONNECTION.UPS",
+          "description": "TRANSLATE.CONNECTION.UIOPS_DESCRIPTION",
+          "value": false
         },
         {
           "id": "debugging",

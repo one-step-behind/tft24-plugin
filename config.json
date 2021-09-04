@@ -11,6 +11,10 @@
     "type": "int",
     "value": 12
   },
+  "ups": {
+    "type": "boolean",
+    "value": false
+  },
   "debugging": {
     "type": "boolean",
     "value": false
