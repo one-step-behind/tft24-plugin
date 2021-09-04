@@ -1,0 +1,39 @@
+{
+  "GENERAL": {
+    "DISPLAYCONF": "ILI9341 Display Configuration",
+    "SAVE": "Save"
+  },
+  "CONNECTION": {
+    "DISPLAYSETTINGS": "LCD connection settings",
+    "DISPLAYSETTINGS_DESCRIPTION": "Settings of the ILI9341 (SPI) 240x320 display module.",
+    "GPIO_DC": "GPIO Pin DC",
+    "GPIO_DC_DOC":"The DC GPIO pin to which this pin connects on the Raspberry Pi.",
+    "GPIO_DC_DESCRIPTION": "Default: 24",
+    "GPIO_RST": "GPIO Pin RESET",
+    "GPIO_RST_DOC":"The RESET GPIO pin to which this pin connects on the Raspberry Pi.",
+    "GPIO_RST_DESCRIPTION": "Default: 25",
+    "GPIO_LED": "GPIO Pin LED",
+    "GPIO_LED_DOC":"The LED GPIO pin to which this pin connects on the Raspberry Pi.",
+    "GPIO_LED_DESCRIPTION": "Default: 12",
+    "DEBUGGING": "Debug mode",
+    "DEBUGGING_DESCRIPTION": "Enable/disable Debug mode"
+  },
+  "DISPLAY_SETTINGS": {
+    "VISUAL_SETTINGS": "Visual settings",
+    "DISPLAY_FONTFACE": "Font",
+    "DISPLAY_FONTFACE_DOC": "Choose your font for displaying the data.",
+    "DISPLAY_LANDSCAPE": "Landscape",
+    "DISPLAY_LANDSCAPE_DOC": "Switch display to landscape orientation. If set enabled the content will be rotated 90° counter clockwise.",
+    "COVER_FULLSCREEN": "Cover fullscreen",
+    "COVER_FULLSCREEN_DOC": "Show album cover in fullscreen. Only used if landscape is turned off.",
+    "COVER_WIDTH": "Cover size",
+    "COVER_WIDTH_DOC": "Size of cover in pixel. It will be used for width and height and obviously only if cover fullscreen is disabled. Default: 80",
+    "COVER_TRANSPARENCY": "Cover transparency",
+    "COVER_TRANSPARENCY_DOC": "Transparency of cover. Only used if cover fullscreen is enabled. Default: 30%"
+  },
+  "SERVICE": {
+    "ACTIONS": "Display Service",
+    "RESTART": "Restart Display Service",
+    "RESTART_DOC": "Sometimes the display fails or doesn't show anything anymore. You can restart the display service here."
+  }
+}

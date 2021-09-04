@@ -1,0 +1,39 @@
+{
+  "GENERAL": {
+    "DISPLAYCONF": "ILI9341 Display Konfiguration",
+    "SAVE": "Speichern"
+  },
+  "CONNECTION": {
+    "DISPLAYSETTINGS": "TFT Einstellungen",
+    "DISPLAYSETTINGS_DESCRIPTION": "Einstellungen des ILI9341 (SPI) 240x320 Display-Moduls.",
+    "GPIO_DC": "GPIO Pin DC",
+    "GPIO_DC_DOC":"DC GPIO Pin welcher zum Raspberry Pi verbindet.",
+    "GPIO_DC_DESCRIPTION": "Standard: 24",
+    "GPIO_RST": "GPIO Pin RESET",
+    "GPIO_RST_DOC":"RESET GPIO Pin welcher zum Raspberry Pi verbindet.",
+    "GPIO_RST_DESCRIPTION": "Standard: 25",
+    "GPIO_LED": "GPIO Pin LED",
+    "GPIO_LED_DOC":"LED GPIO Pin welcher zum Raspberry Pi verbindet.",
+    "GPIO_LED_DESCRIPTION": "Standard: 12",
+    "DEBUGGING": "Debug Modus",
+    "DEBUGGING_DESCRIPTION": "Debugmodus ein-/ausschalten"
+  },
+  "DISPLAY_SETTINGS": {
+    "VISUAL_SETTINGS": "Aussehen",
+    "DISPLAY_FONTFACE": "Schriftart",
+    "DISPLAY_FONTFACE_DOC": "Auswahl der Schriftart",
+    "DISPLAY_LANDSCAPE": "Querformat",
+    "DISPLAY_LANDSCAPE_DOC": "Anzeige des Displays auf Querformat einstellen. Wenn eingeschaltet, wird die Anzeige um 90° nach links gedreht.",
+    "COVER_FULLSCREEN": "Cover Vollbild",
+    "COVER_FULLSCREEN_DOC": "Album Cover als Vollbild. Wird nur verwendet, wenn Querformat ausgeschaltet ist.",
+    "COVER_WIDTH": "Cover Größe",
+    "COVER_WIDTH_DOC": "Größe des Coverbildes in Pixel. Wird verwendet für Breite und Höhe und nur, wenn Vollbild ausgeschaltet ist. Standard: 80",
+    "COVER_TRANSPARENCY": "Cover Transparenz",
+    "COVER_TRANSPARENCY_DOC": "Transparenz des Covers. Wird nur verwendet, wenn Vollbild eingeschaltet ist. Standard: 30%"
+  },
+  "SERVICE": {
+    "ACTIONS": "Display Service",
+    "RESTART": "Display Service neu starten",
+    "RESTART_DOC": "Manchmal hängt das Display oder zeigt nichts mehr an. Hier kannst Du den Display Service neu starten."
+  }
+}

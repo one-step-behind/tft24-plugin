@@ -1,0 +1,205 @@
+{
+  "page": {
+    "label": "TRANSLATE.GENERAL.DISPLAYCONF"
+  },
+  "sections": [
+    {
+      "id": "section_connection",
+      "element": "section",
+      "label": "TRANSLATE.CONNECTION.DISPLAYSETTINGS",
+      "description": "TRANSLATE.CONNECTION.DISPLAYSETTINGS_DESCRIPTION",
+      "icon": "fa-cogs",
+      "onSave": {
+        "type": "controller",
+        "endpoint": "miscellanea/tft24-display",
+        "method": "updateConnectionConfig"
+      },
+      "saveButton": {
+        "label": "TRANSLATE.GENERAL.SAVE",
+        "data": [
+          "gpio_dc",
+          "gpio_rst",
+          "gpio_led",
+          "debugging"
+        ]
+      },
+      "content": [
+        {
+          "id": "gpio_dc",
+          "element": "input",
+          "type": "text",
+          "label": "TRANSLATE.CONNECTION.GPIO_DC",
+          "doc": "TRANSLATE.CONNECTION.GPIO_DC_DOC",
+          "description": "TRANSLATE.CONNECTION.GPIO_DC_DESCRIPTION",
+          "value": 24
+        },
+        {
+          "id": "gpio_rst",
+          "element": "input",
+          "type": "text",
+          "label": "TRANSLATE.CONNECTION.GPIO_RST",
+          "doc": "TRANSLATE.CONNECTION.GPIO_RST_DOC",
+          "description": "TRANSLATE.CONNECTION.GPIO_RST_DESCRIPTION",
+          "value": 25
+        },
+        {
+          "id": "gpio_led",
+          "element": "input",
+          "type": "text",
+          "label": "TRANSLATE.CONNECTION.GPIO_LED",
+          "doc": "TRANSLATE.CONNECTION.GPIO_LED_DOC",
+          "description": "TRANSLATE.CONNECTION.GPIO_LED_DESCRIPTION",
+          "value": 12
+        },
+        {
+          "id": "debugging",
+          "element": "switch",
+          "label": "TRANSLATE.CONNECTION.DEBUGGING",
+          "description": "TRANSLATE.CONNECTION.DEBUGGING_DESCRIPTION",
+          "value": false
+        }
+      ]
+    },
+    {
+      "id": "section_visual_settings",
+      "element": "section",
+      "label": "TRANSLATE.DISPLAY_SETTINGS.VISUAL_SETTINGS",
+      "icon": "fa-cogs",
+      "onSave": {
+        "type": "controller",
+        "endpoint": "miscellanea/tft24-display",
+        "method": "updateVisualConfig"
+      },
+      "saveButton": {
+        "label": "TRANSLATE.GENERAL.SAVE",
+        "data": [
+          "display_fontface",
+          "display_landscape",
+          "cover_fullscreen",
+          "cover_width",
+          "cover_transparency"
+        ]
+      },
+      "content": [
+        {
+          "id": "display_fontface",
+          "element": "select",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.DISPLAY_FONTFACE",
+          "doc": "TRANSLATE.DISPLAY_SETTINGS.DISPLAY_FONTFACE_DOC",
+          "value": {
+            "value": "DejaVuSansCondensed.ttf",
+            "label": "DejaVuSansCondensed.ttf"
+          },
+          "options": [
+            {
+              "value": "BebasNeue.otf",
+              "label": "BebasNeue.otf"
+            },
+            {
+              "value": "DejaVuSans.ttf",
+              "label": "DejaVuSans.ttf"
+            },
+            {
+              "value": "DejaVuSansCondensed.ttf",
+              "label": "DejaVuSansCondensed.ttf"
+            },
+            {
+              "value": "DejaVuSansMono.ttf",
+              "label": "DejaVuSansMono.ttf"
+            },
+            {
+              "value": "FreeSans.ttf",
+              "label": "FreeSans.ttf"
+            },
+            {
+              "value": "FreeSerifItalic.ttf",
+              "label": "FreeSerifItalic.ttf"
+            },
+            {
+              "value": "unispace.ttf",
+              "label": "unispace.ttf"
+            }
+          ]
+        },
+        {
+          "id": "display_landscape",
+          "element": "switch",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.DISPLAY_LANDSCAPE",
+          "doc": "TRANSLATE.DISPLAY_SETTINGS.DISPLAY_LANDSCAPE_DOC",
+          "value": false,
+          "onChange": {
+            "type": "controller",
+            "endpoint": "miscellanea/tft24-display",
+            "method": "updateVisualConfig"
+          }
+        },
+        {
+          "id": "cover_fullscreen",
+          "element": "switch",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.COVER_FULLSCREEN",
+          "doc": "TRANSLATE.DISPLAY_SETTINGS.COVER_FULLSCREEN_DOC",
+          "value": false
+        },
+        {
+          "id": "cover_width",
+          "element": "input",
+          "type": "number",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.COVER_WIDTH",
+          "doc": "TRANSLATE.DISPLAY_SETTINGS.COVER_WIDTH_DOC",
+          "description": "px",
+          "value": 80,
+          "attributes": [
+            {"placeholder": "pixel"},
+            {"maxlength": 3},
+            {"min": 10},
+            {"max": 320},
+            {"step": 1}
+          ],
+					"visibleIf": {
+						"field": "cover_fullscreen",
+						"value": false
+					}
+        },
+        {
+          "id": "cover_transparency",
+          "element": "input",
+          "type": "number",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.COVER_TRANSPARENCY",
+          "doc": "TRANSLATE.DISPLAY_SETTINGS.COVER_TRANSPARENCY_DOC",
+          "description": "%",
+          "value": 30,
+          "attributes": [
+            {"placeholder": "opacity"},
+            {"maxlength": 3},
+            {"min": 10},
+            {"max": 100},
+            {"step": 10}
+          ],
+					"visibleIf": {
+						"field": "cover_fullscreen",
+						"value": true
+					}
+        }
+      ]
+    },
+    {
+      "id": "section_restart",
+      "element": "section",
+      "label": "TRANSLATE.SERVICE.ACTIONS",
+      "icon": "fa-reload",
+      "content": [
+        {
+          "id": "displayRestart",
+          "element": "button",
+          "label": "TRANSLATE.SERVICE.RESTART",
+          "doc": "TRANSLATE.SERVICE.RESTART_DOC",
+          "onClick": {
+            "type": "controller",
+            "endpoint": "miscellanea/tft24-display",
+            "method": "serviceRestart"
+          }
+        }
+      ]
+    }
+  ]
+}

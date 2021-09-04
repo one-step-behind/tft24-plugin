@@ -1,0 +1,21 @@
+[Unit]
+Description=Volumio Display Daemon
+DefaultDependencies=no
+After=syslog.target volumio.service mpd.service
+# wireless.service volumiossh.service network.target
+
+[Service]
+User=volumio
+#Type=simple
+WorkingDirectory=/home/volumio/tft24-display
+ExecStart=/usr/bin/python /home/volumio/tft24-display/tft24-display.py
+Restart=on-failure
+RestartSec=10
+SyslogIdentifier=VolumioTftDisplay
+StandardOutput=syslog
+StandardError=syslog
+# Maps termination to Keyboard interrupt
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

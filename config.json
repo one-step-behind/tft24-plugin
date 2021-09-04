@@ -1,0 +1,38 @@
+{
+  "gpio_rst": {
+    "type": "int",
+    "value": 25
+  },
+  "gpio_dc": {
+    "type": "int",
+    "value": 24
+  },
+  "gpio_led": {
+    "type": "int",
+    "value": 12
+  },
+  "debugging": {
+    "type": "boolean",
+    "value": false
+  },
+  "display_fontface": {
+    "type": "string",
+    "value": "DejaVuSansCondensed.ttf"
+  },
+  "display_landscape": {
+    "type": "boolean",
+    "value": false
+  },
+  "cover_fullscreen": {
+    "type": "boolean",
+    "value": false
+  },
+  "cover_width": {
+    "type": "int",
+    "value": 80
+  },
+  "cover_transparency": {
+    "type": "int",
+    "value": 30
+  }
+}
