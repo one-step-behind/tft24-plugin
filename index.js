@@ -97,6 +97,13 @@ ControllerVolumioDisplay.prototype.getUIConfig = function() {
       uiconf.sections[1].content[3].value = self.config.get('cover_width');
       uiconf.sections[1].content[4].value = self.config.get('cover_transparency');
 
+      uiconf.sections[1].content[5].value = self.config.get('color_timebar');
+      uiconf.sections[1].content[6].value = self.config.get('color_time');
+      uiconf.sections[1].content[7].value = self.config.get('color_album');
+      uiconf.sections[1].content[8].value = self.config.get('color_artist');
+      uiconf.sections[1].content[9].value = self.config.get('color_songtitle');
+      uiconf.sections[1].content[10].value = self.config.get('color_status');
+
       self.logger.info("Display settings loaded");
 
       defer.resolve(uiconf);
@@ -256,6 +263,13 @@ ControllerVolumioDisplay.prototype.updateVisualConfig = function(data) {
   self.config.set('cover_fullscreen', data['cover_fullscreen']);
   self.config.set('cover_width', self.tryParse(data['cover_width'], 80));
   self.config.set('cover_transparency', self.tryParse(data['cover_transparency'], 30));
+
+  self.config.set('color_album', data['color_album']);
+  self.config.set('color_artist', data['color_artist']);
+  self.config.set('color_songtitle', data['color_songtitle']);
+  self.config.set('color_status', data['color_status']);
+  self.config.set('color_time', data['color_time']);
+  self.config.set('color_timebar', data['color_timebar']);
 
   self.commandRouter.pushToastMessage('success', "Successfully saved visual settings");
 

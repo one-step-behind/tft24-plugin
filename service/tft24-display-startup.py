@@ -26,7 +26,6 @@ GPIO_LED = 12 # None
 displayLandscape = False # True | False
 
 # Colors
-color = (180, 110, 6)
 color = (200, 70, 0)
 
 # Text configuration
@@ -47,6 +46,7 @@ try:
         GPIO_RST = int(config['gpio_rst']['value'])
         GPIO_LED = int(config['gpio_led']['value'])
         displayLandscape = bool(config['display_landscape']['value'])
+        color = tuple(map(int, str(config['color_artist']['value']).split(', ')))
 except Exception as e:
     pass
 

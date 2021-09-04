@@ -29,7 +29,13 @@
     "COVER_WIDTH": "Cover Größe",
     "COVER_WIDTH_DOC": "Größe des Coverbildes in Pixel. Wird verwendet für Breite und Höhe und nur, wenn Vollbild ausgeschaltet ist. Standard: 80",
     "COVER_TRANSPARENCY": "Cover Transparenz",
-    "COVER_TRANSPARENCY_DOC": "Transparenz des Covers. Wird nur verwendet, wenn Vollbild eingeschaltet ist. Standard: 30%"
+    "COVER_TRANSPARENCY_DOC": "Transparenz des Covers. Wird nur verwendet, wenn Vollbild eingeschaltet ist. Standard: 30%",
+    "COLOR_ALBUM": "Farbe: Album",
+    "COLOR_ARTIST": "Farbe: Artist",
+    "COLOR_SONGTITLE": "Farbe: Songtitel",
+    "COLOR_STATUS": "Farbe: Status",
+    "COLOR_TIME": "Farbe: Zeit",
+    "COLOR_TIMEBAR": "Farbe: Zeitbalken"
   },
   "SERVICE": {
     "ACTIONS": "Display Service",

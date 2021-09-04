@@ -29,7 +29,13 @@
     "COVER_WIDTH": "Cover size",
     "COVER_WIDTH_DOC": "Size of cover in pixel. It will be used for width and height and obviously only if cover fullscreen is disabled. Default: 80",
     "COVER_TRANSPARENCY": "Cover transparency",
-    "COVER_TRANSPARENCY_DOC": "Transparency of cover. Only used if cover fullscreen is enabled. Default: 30%"
+    "COVER_TRANSPARENCY_DOC": "Transparency of cover. Only used if cover fullscreen is enabled. Default: 30%",
+    "COLOR_ALBUM": "Color: Album",
+    "COLOR_ARTIST": "Color: Artist",
+    "COLOR_SONGTITLE": "Color: Songtitel",
+    "COLOR_STATUS": "Color: Status",
+    "COLOR_TIME": "Color: Zeit",
+    "COLOR_TIMEBAR": "Color: Zeitbalken"
   },
   "SERVICE": {
     "ACTIONS": "Display Service",

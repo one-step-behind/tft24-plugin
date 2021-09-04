@@ -34,5 +34,29 @@
   "cover_transparency": {
     "type": "int",
     "value": 30
+  },
+  "color_album": {
+    "type": "string",
+    "value": "180, 110, 6"
+  },
+  "color_artist": {
+    "type": "string",
+    "value": "180, 180, 180"
+  },
+  "color_songtitle": {
+    "type": "string",
+    "value": "255, 255, 255"
+  },
+  "color_status": {
+    "type": "string",
+    "value": "180, 180, 180"
+  },
+  "color_time": {
+    "type": "string",
+    "value": "255, 255, 255"
+  },
+  "color_timebar": {
+    "type": "string",
+    "value": "180, 110, 6"
   }
 }

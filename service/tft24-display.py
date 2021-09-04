@@ -35,14 +35,6 @@ GPIO.setwarnings(False)
 # Display
 displayMargin = 5 # px
 
-# Colors
-colorAlbum = (180, 110, 6) #(84, 198, 136)
-colorArtist = (180, 180, 180)
-colorSongtitle = (255, 255, 255) #(220, 160, 25)
-colorStatus = (180, 180, 180)
-colorTime = (255, 255, 255)
-colorTimebar = (180, 110, 6)
-
 # Text configuration
 textSizeSmall = 11
 lineHeightSmall = 12
@@ -110,10 +102,17 @@ GPIO_LED = 12 # None
 displayLandscape = False # True | False
 debugOutput = False # True | False
 
-# Album image configuration
+# Album image
 coverFullscreen = False # True | False
 coverSize = 80 # only used if albumImageFull is False
 coverTransparency = 0.3 # only used if albumImageFull is True
+# Colors
+colorAlbum = (180, 110, 6) #(84, 198, 136)
+colorArtist = (180, 180, 180)
+colorSongtitle = (255, 255, 255) #(220, 160, 25)
+colorStatus = (180, 180, 180)
+colorTime = (255, 255, 255)
+colorTimebar = (180, 110, 6)
 # =============================================================================
 
 # Some precalculations
@@ -122,7 +121,8 @@ textTopSongDetailsArtist = textTopSongDetailsAlbum + (textSizeNormal * 2) + 2
 textTopSongDetailsTitle = textTopSongDetailsArtist + (textSizeNormal * 2) + 2
 
 def initDisplay():
-    global TFT, GPIO_DC, GPIO_RST, GPIO_LED, displayLandscape, coverFullscreen, coverSize, coverTransparency, debugOutput, draw
+    global debugOutput, draw, TFT, GPIO_DC, GPIO_RST, GPIO_LED, displayLandscape, coverFullscreen, coverSize
+    global coverTransparency, colorAlbum, colorArtist, colorSongtitle, colorStatus, colorTime, colorTimebar
 
     # read config from within plugins file
     try:
@@ -141,11 +141,19 @@ def initDisplay():
             coverSize = int(config['cover_width']['value'])
             coverTransparency = float(config['cover_transparency']['value'])/100
 
+            colorAlbum = tuple(map(int, str(config['color_album']['value']).split(',')))
+            colorArtist = tuple(map(int, str(config['color_artist']['value']).split(',')))
+            colorSongtitle = tuple(map(int, str(config['color_songtitle']['value']).split(',')))
+            colorStatus = tuple(map(int, str(config['color_status']['value']).split(',')))
+            colorTime = tuple(map(int, str(config['color_time']['value']).split(',')))
+            colorTimebar = tuple(map(int, str(config['color_timebar']['value']).split(',')))
+
         debug("Initialized TFT settings")
         debug("displayLandscape", displayLandscape)
         debug("coverFullscreen", coverFullscreen)
         debug("coverSize", coverSize)
         debug("coverTransparency", coverTransparency)
+        debug("colorAlbum", colorAlbum)
     except Exception as e:
         debug("Something went wrong while getting config: " + str(e))
         pass

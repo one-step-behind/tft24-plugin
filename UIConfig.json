@@ -77,7 +77,13 @@
           "display_landscape",
           "cover_fullscreen",
           "cover_width",
-          "cover_transparency"
+          "cover_transparency",
+          "color_album",
+          "color_artist",
+          "color_songtitle",
+          "color_status",
+          "color_time",
+          "color_timebar"
         ]
       },
       "content": [
@@ -179,6 +185,54 @@
 						"field": "cover_fullscreen",
 						"value": true
 					}
+        },
+        {
+          "id": "color_timebar",
+          "element": "input",
+          "type": "string",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.COLOR_TIMEBAR",
+          "description": "180, 110, 6",
+          "value": "180, 110, 6"
+        },
+        {
+          "id": "color_time",
+          "element": "input",
+          "type": "string",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.COLOR_TIME",
+          "description": "255, 255, 255",
+          "value": "255, 255, 255"
+        },
+        {
+          "id": "color_album",
+          "element": "input",
+          "type": "string",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.COLOR_ALBUM",
+          "description": "180, 110, 6",
+          "value": "180, 110, 6"
+        },
+        {
+          "id": "color_artist",
+          "element": "input",
+          "type": "string",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.COLOR_ARTIST",
+          "description": "180, 180, 180",
+          "value": "180, 180, 180"
+        },
+        {
+          "id": "color_songtitle",
+          "element": "input",
+          "type": "string",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.COLOR_SONGTITLE",
+          "description": "255, 255, 255",
+          "value": "255, 255, 255"
+        },
+        {
+          "id": "color_status",
+          "element": "input",
+          "type": "string",
+          "label": "TRANSLATE.DISPLAY_SETTINGS.COLOR_STATUS",
+          "description": "180, 180, 180",
+          "value": "180, 180, 180"
         }
       ]
     },
