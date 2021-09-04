@@ -209,10 +209,6 @@ def getNetworkIp():
         iface = 'None'
         ipaddress = 'unknown'
 
-def getTemperature():
-    cpu = CPUTemperature()
-    return cpu.temperature
-
 class ShutdownView():
     def __init__(self):
         debug('=== SHUTDOWN VIEW')
@@ -226,6 +222,7 @@ class ShutdownView():
         TFT.textdirect((centerTextPositionX, centerTextPositionY), shutdownText, fontHuge, colorArtist)
 
 def prepareAlbumArt():
+    """Album cover"""
     albumImageUrl = None
     albumArtResponse = None
     albumIO = None
@@ -265,8 +262,8 @@ def prepareAlbumArt():
                     cleanPart(0, TFT.height - coverSize, coverSize, TFT.height)
                     draw.pasteimageresized(albumIO, (0, TFT.height - coverSize), (coverSize, coverSize))
 
-# Time elapsed / Time duration & visual bar
 def prepareTime(barPosition, textPosition):
+    """Time elapsed / Time duration & visual bar"""
     # TODO: THIS IS SOMEHOW BULLSHIT and makes no real sense yet, has to be re-thougt
 
     debug('=== TIME')
@@ -345,8 +342,8 @@ def prepareTime(barPosition, textPosition):
                 rightDurationPosition = barWidth - fontSmall.getsize(textDuration)[0] - displayMargin # calculate right pos based on text width
                 draw.textwrapped((rightDurationPosition, textPosTop), textDuration, 30, lineHeightNormal, fontSmall, colorTime)
 
-# Play status symbol
 class PlayStateSymbol():
+    """Play status symbol"""
     # global textStatus
 
     def __init__(self):
@@ -362,8 +359,8 @@ class PlayStateSymbol():
 
         draw.pasteimage(currentDir + "/img/status-" + textStatus + ".png", (left, top), True)
 
-# Volume text
 class VolumeText():
+    """Volume text"""
     # global textVolume
     def __init__(self):
         debug('=== VOLUME')
@@ -387,8 +384,8 @@ class VolumeText():
 
         draw.textwrapped((rightVolumePosition, valueTop), textVolume, 30, lineHeightBig, fontBig, "white")
 
-# Album
 class AlbumName:
+    """Album text"""
     def __init__(self):
         self.valueTop = 115 if displayLandscape else textTopSongDetailsAlbum
 
@@ -407,8 +404,8 @@ class AlbumName:
             cleanPart(0, self.valueTop, TFT.width -1, self.valueTop + (lineHeightNormal * 2) -1)
             draw.textwrapped((displayMargin, self.valueTop), textAlbum, 34, lineHeightNormal, fontNormal, colorAlbum)
 
-# Artist
 class ArtistName:
+    """Artist text"""
     def __init__(self):
         self.valueTop = 85 if displayLandscape else textTopSongDetailsArtist
 
@@ -430,8 +427,8 @@ class ArtistName:
             cleanPart(0, self.valueTop, TFT.width -1, self.valueTop + (lineHeightNormal * 2) -1)
             draw.textwrapped((displayMargin, self.valueTop), textArtist, 34, lineHeightNormal, fontNormal, colorArtist)
 
-# Song title
 class SongTitle:
+    """Song title text"""
     def __init__(self):
         self.valueTop = 145 if displayLandscape else textTopSongDetailsTitle
         self.textTitle = textTitle # set globally
@@ -459,8 +456,8 @@ class SongTitle:
             cleanPart(0, self.valueTop, TFT.width -1, TFT.height - coverSize -1)
             draw.textwrapped((displayMargin, self.valueTop), self.textTitle, 25, lineHeightBig, fontBig, colorSongtitle)
 
-# File/Stream data at bottom of display (icon, bitrate)
 class FilestreamInfo:
+    """File/Stream data (icon, bitrate)"""
     def __init__(self):
         self.fileData = ''
         self.valueLeft = displayMargin + (0 if displayLandscape else coverSize)
@@ -502,8 +499,8 @@ class FilestreamInfo:
         draw.textwrapped(((self.valueLeft + maxWidthSourceIcon + displayMargin), self.valueTop +1), self.fileData, 30, lineHeightSmall, fontSmall, colorStatus)
         #TFT.textdirect(((self.valueLeft + maxWidthSourceIcon + displayMargin), self.valueTop +1), self.fileData, fontSmall, colorStatus)
 
-# Network IP
 class NetworkInfo:
+    """Network IP"""
     def __init__(self):
         self.ip = getNetworkIp()
         self.valueLeft = displayMargin + (0 if displayLandscape else coverSize)
@@ -523,12 +520,12 @@ class NetworkInfo:
         else:
             draw.textwrapped(((self.valueLeft + maxWidthSourceIcon + displayMargin), self.valueTop +1), 'Keine IP', 30, lineHeightSmall, fontSmall, colorStatus)
 
-# UPS capacity icon and text
 class BatteryInfo():
+    """UPS capacity icon and text"""
     def __init__(self):
         if showUpsInfo:
-            self.cpuTemperatureInt = getTemperature()
-            self.upsVoltageInt = readVoltage()
+            self.getTemperature()
+            self.readVoltage()
             self.lastUpsCapacityInt = lastUpsCapacityInt
 
             self.valueLeft = displayMargin + (0 if displayLandscape else coverSize)
@@ -549,6 +546,19 @@ class BatteryInfo():
         draw.textwrapped(((self.valueLeft + maxWidthSourceIcon + displayMargin), self.valueTop +1), upsStatusString, 30, lineHeightSmall, fontSmall, colorStatus)
 
         lastUpsCapacityInt = upsCapacityInt
+    
+    def getTemperature(self):
+        """read temperature"""
+        cpu = CPUTemperature()
+        self.cpuTemperatureInt = cpu.temperature
+
+    # Read UPS Voltage
+    def readVoltage(self):
+        """read voltage from UPS"""
+        read = ups_bus.read_word_data(ups_device_address, 2)
+        swapped = unpack("<H", pack(">H", read))[0]
+        voltage = swapped * 1.25 /1000/16
+        self.upsVoltageInt = voltage
 
 # Read UPS capacity
 def readCapacity():
@@ -556,13 +566,6 @@ def readCapacity():
     swapped = unpack("<H", pack(">H", read))[0]
     capacity = (swapped / 256)
     return capacity
-
-# Read UPS Voltage
-def readVoltage():
-    read = ups_bus.read_word_data(ups_device_address, 2)
-    swapped = unpack("<H", pack(">H", read))[0]
-    voltage = swapped * 1.25 /1000/16
-    return voltage
 
 # Read UPS status
 def readStatus():
