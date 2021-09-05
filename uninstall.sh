@@ -1,38 +1,34 @@
 #!/bin/bash
-## Display uninstallation script
+## ILI9341 TFT Display plugin uninstallation script
 echo "=== Uninstalling Volumio ILI9341 TFT Display plugin and it's dependencies..."
+PLUGIN_TYPE="user_interface"
 PLUGIN_NAME="tft24-display"
-PLUGIN_TYPE="miscellanea"
 INSTALLING="./${PLUGIN_NAME}-plugin.installing"
 UNINSTALLING="./${PLUGIN_NAME}-plugin.uninstalling"
+PLUGIN_DATA_PATH=/data/plugins/${PLUGIN_TYPE}/${PLUGIN_NAME}
 
-if [ ! -f $INSTALLING ]; then
-
+if [ -f $UNINSTALLING ]; then
+	echo "Plugin is already uninstalling! ABORT uninstall. ==="
+elif [ -f $INSTALLING ]; then
+	echo "Plugin is still installing! ABORT uninstall. ==="
+else
 	touch $UNINSTALLING
 
-	PLUGINPATH=/data/plugins/${PLUGIN_TYPE}/${PLUGIN_NAME}
-	HOMEPATH=/home/volumio/${PLUGIN_NAME}
-
-	# Stop and unsoftlink Display Plugin services
+	# Stop and unsoftlink the display startup service
 	sudo systemctl stop ${PLUGIN_NAME}-startup
-	sudo systemctl stop ${PLUGIN_NAME}
-	#sudo rm /lib/systemd/system/${PLUGIN_NAME}-startup.service
 	rm /etc/systemd/system/${PLUGIN_NAME}-startup.service
+
+	# Stop and unsoftlink the Volumio display service
+	sudo systemctl stop ${PLUGIN_NAME}
 	rm /etc/systemd/system/${PLUGIN_NAME}.service
 
-	# Remove plugin
-	rm -rf ${PLUGINPATH}
+	# Remove plugin folder
+	rm -rf ${PLUGIN_DATA_PATH}
 
-	# Remove Plugin resources
-	rm -rf ${HOMEPATH}
+	# Remove plugin configuration
 	rm -rf /data/configuration/${PLUGIN_TYPE}/${PLUGIN_NAME}
 
 	rm $UNINSTALLING
 
-	#required to end the plugin uninstall
 	echo "Plugin successfully uninstalled. ==="
-elif [ ! -f $UNINSTALLING ]; then
-	echo "Plugin is already uninstalling! ABORT uninstall. ==="
-else
-	echo "Plugin is still installing! ABORT uninstall. ==="
 fi

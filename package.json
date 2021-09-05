@@ -11,7 +11,7 @@
   "volumio_info": {
     "prettyName": "ILI9341 TFT",
     "icon": "fa fa-television",
-    "plugin_type": "miscellanea"
+    "plugin_type": "user_interface"
   },
   "dependencies": {
     "fs-extra": "^8.1.0",

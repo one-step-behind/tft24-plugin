@@ -11,7 +11,7 @@
       "icon": "fa-cogs",
       "onSave": {
         "type": "controller",
-        "endpoint": "miscellanea/tft24-display",
+        "endpoint": "user_interface/tft24-display",
         "method": "updateConnectionConfig"
       },
       "saveButton": {
@@ -75,7 +75,7 @@
       "icon": "fa-cogs",
       "onSave": {
         "type": "controller",
-        "endpoint": "miscellanea/tft24-display",
+        "endpoint": "user_interface/tft24-display",
         "method": "updateVisualConfig"
       },
       "saveButton": {
@@ -143,7 +143,7 @@
           "value": false,
           "onChange": {
             "type": "controller",
-            "endpoint": "miscellanea/tft24-display",
+            "endpoint": "user_interface/tft24-display",
             "method": "updateVisualConfig"
           }
         },
@@ -257,7 +257,7 @@
           "doc": "TRANSLATE.SERVICE.RESTART_DOC",
           "onClick": {
             "type": "controller",
-            "endpoint": "miscellanea/tft24-display",
+            "endpoint": "user_interface/tft24-display",
             "method": "serviceRestart"
           }
         }

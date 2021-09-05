@@ -1,14 +1,14 @@
 [Unit]
 Description=Volumio Display Startup Message Daemon
 DefaultDependencies=no
-After=sysinit.target
-#After=dbus.service
+After=syslog.target
 
 [Service]
 User=volumio
+Group=volumio
 #Type=simple
-WorkingDirectory=/home/volumio/tft24-display
-ExecStart=/usr/bin/python /home/volumio/tft24-display/tft24-display-startup.py
+WorkingDirectory=/data/plugins/user_interface/tft24-display
+ExecStart=/usr/bin/python /data/plugins/user_interface/tft24-display/service/tft24-display-startup.py
 Restart=on-failure
 RestartSec=10
 SyslogIdentifier=VolumioTftDisplay

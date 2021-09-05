@@ -52,7 +52,7 @@ sleepDelayShutdown = 60 # in seconds
 seekbarHeight = 5 # should be an odd number
 maxWidthSourceIcon = 25
 logfile = '/home/volumio/log/' + PLUGIN_NAME + '.log'
-configFile = '/data/configuration/miscellanea/' + PLUGIN_NAME + '/config.json'
+configFile = '/data/configuration/user_interface/' + PLUGIN_NAME + '/config.json'
 
 # =============================================================================
 # // END CONFIGURATION
@@ -158,11 +158,12 @@ def initDisplay():
         debug("coverSize", coverSize)
         debug("coverTransparency", coverTransparency)
         debug("colorAlbum", colorAlbum)
+
     except Exception as e:
         debug("Something went wrong while getting config: " + str(e))
         pass
     
-    ### Create TFT LCD/TOUCH object:
+    ### Create TFT LCD/TOUCH object
     # If displayLandscape=False or omitted, display defaults to portrait mode
     TFT = TFT24T(SpiDev(), GPIO, landscape=displayLandscape)
 
