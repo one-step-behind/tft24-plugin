@@ -222,46 +222,52 @@ class ShutdownView():
         centerTextPositionY = (TFT.height / 2) - (shutdownTextDimensions[1] / 2) # calculate centerY pos based on text width
         TFT.textdirect((centerTextPositionX, centerTextPositionY), shutdownText, fontHuge, colorArtist)
 
-def prepareAlbumArt():
+class AlbumArt():
     """Album cover"""
-    albumImageUrl = None
-    albumArtResponse = None
-    albumIO = None
 
-    debug('=== ALBUM ART')
+    def __init__(self):
+        self.albumImageUrl = None
+        self.albumArtResponse = None
+        self.albumIO = None
+
+        debug('=== ALBUM ART')
     
-    if volumioStatus.get('albumart') and lastVolumioStatus.get('albumart') != volumioStatus.get('albumart'):
-        albumImageUrl = str(volumioStatus.get('albumart'))
-        debug('albumImageUrl', albumImageUrl)
+        if volumioStatus.get('albumart') and lastVolumioStatus.get('albumart') != volumioStatus.get('albumart'):
+            self.view()
 
-        if albumImageUrl:
-            if not albumImageUrl.startswith('http'):
-                albumImageUrl = localhost + albumImageUrl
 
-            albumArtResponse = RequestGet(albumImageUrl) # , stream=True)
+    def view(self):
+        self.albumImageUrl = str(volumioStatus.get('albumart'))
+        debug('albumImageUrl', self.albumImageUrl)
 
-        if albumArtResponse:
-            debug('albumArtResponse content', albumArtResponse)
-            albumIO = StringIO(albumArtResponse.content)
+        if self.albumImageUrl:
+            if not self.albumImageUrl.startswith('http'):
+                self.albumImageUrl = localhost + self.albumImageUrl
+
+            self.albumArtResponse = RequestGet(self.albumImageUrl) # , stream=True)
+
+        if self.albumArtResponse:
+            debug('albumArtResponse content', self.albumArtResponse)
+            self.albumIO = StringIO(self.albumArtResponse.content)
         else:
             # fallback image
-            albumIO = currentDir + '/img/albumart.jpg'
+            self.albumIO = currentDir + '/img/albumart.jpg'
             
 
-        if albumIO:
+        if self.albumIO:
             debug('reDRAW album image')
 
             if displayLandscape:
                 #cleanPart(0, textPosTop, albumImageWidth, albumImageWidth + textSizeSmall)
-                draw.pasteimageresized(albumIO, (TFT.height - coverSize, 0), (coverSize, coverSize))
+                draw.pasteimageresized(self.albumIO, (TFT.height - coverSize, 0), (coverSize, coverSize))
             else:
                 if coverFullscreen:
                     # Big album cover
-                    draw.pasteimageresized(albumIO, (0, TFT.height - TFT.width), (TFT.width, TFT.width), coverTransparency)
+                    draw.pasteimageresized(self.albumIO, (0, TFT.height - TFT.width), (TFT.width, TFT.width), coverTransparency)
                 else:
                     # Small album cover
                     cleanPart(0, TFT.height - coverSize, coverSize, TFT.height)
-                    draw.pasteimageresized(albumIO, (0, TFT.height - coverSize), (coverSize, coverSize))
+                    draw.pasteimageresized(self.albumIO, (0, TFT.height - coverSize), (coverSize, coverSize))
 
 def prepareTime(barPosition, textPosition):
     """Time elapsed / Time duration & visual bar"""
@@ -444,7 +450,7 @@ class SongTitle:
         if not textAlbum:
             self.valueTop = textTopSongDetailsArtist
 
-        # shorten title length to prevent overflow
+        # shorten title length to prevent visual overflow
         if len(self.textTitle) > self.maxTitleLength:
             self.textTitle = self.textTitle[:self.maxTitleLength] + '...'
 
@@ -600,7 +606,7 @@ def drawCapacitySymbol(percent):
 # ==========================================
 
 def drawView():
-    prepareAlbumArt() # takes 2% of cpu
+    AlbumArt() # takes 2% of cpu
     PlayStateSymbol()
     VolumeText()
     prepareTime(76 if displayLandscape else 78, (displayMargin, 60 if displayLandscape else 85)) # barPosition, text: (left, top)
