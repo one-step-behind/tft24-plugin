@@ -176,9 +176,9 @@ def initDisplay():
 
     # Load and draw background image
     if TFT.is_landscape:
-        TFT.load_wallpaper(currentDir + '/img/volumio_bg_horizontal.png')
+        TFT.load_wallpaper(currentDir + "/img/volumio_bg_horizontal.png")
     else:
-        TFT.load_wallpaper(currentDir + '/img/volumio_bg_portrait.png')
+        TFT.load_wallpaper(currentDir + "/img/volumio_bg_portrait.png")
 
 # Clean part of screen
 def cleanPart(x1, y1, x2, y2):
@@ -190,7 +190,7 @@ def cleanPart(x1, y1, x2, y2):
 def setFonts(displayFontface):
     global fontSmall, fontNormal, fontBig, fontHuge
 
-    fontFamily = currentDir + '/fonts/' + displayFontface
+    fontFamily = currentDir + "/fonts/" + displayFontface
     fontSmall = ImageFont.truetype(fontFamily, textSizeSmall)
     fontNormal = ImageFont.truetype(fontFamily, textSizeNormal)
     fontBig = ImageFont.truetype(fontFamily, textSizeBig)
@@ -205,14 +205,14 @@ def getNetworkIp():
     if networkGateways and networkGateways['default']:
         iface = networkGateways['default'][AF_INET][1]
         ipaddress = ifaddresses(iface)[AF_INET][0]['addr']
-        debug('NET', iface, ipaddress)
+        debug("NET", iface, ipaddress)
     else:
-        iface = 'None'
-        ipaddress = 'unknown'
+        iface = "None"
+        ipaddress = "unknown"
 
 class ShutdownView():
     def __init__(self):
-        debug('=== SHUTDOWN VIEW')
+        debug("=== SHUTDOWN VIEW")
 
         TFT.clear()
         cleanPart(0, 0, TFT.height, TFT.width -1)
@@ -230,7 +230,7 @@ class AlbumArt():
         self.albumArtResponse = None
         self.albumIO = None
 
-        debug('=== ALBUM ART')
+        debug("=== ALBUM ART")
     
         if volumioStatus.get('albumart') and lastVolumioStatus.get('albumart') != volumioStatus.get('albumart'):
             self.view()
@@ -238,7 +238,7 @@ class AlbumArt():
 
     def view(self):
         self.albumImageUrl = str(volumioStatus.get('albumart'))
-        debug('albumImageUrl', self.albumImageUrl)
+        debug("albumImageUrl", self.albumImageUrl)
 
         if self.albumImageUrl:
             if not self.albumImageUrl.startswith('http'):
@@ -247,7 +247,7 @@ class AlbumArt():
             self.albumArtResponse = RequestGet(self.albumImageUrl) # , stream=True)
 
         if self.albumArtResponse:
-            debug('albumArtResponse content', self.albumArtResponse)
+            debug("albumArtResponse content", self.albumArtResponse)
             self.albumIO = StringIO(self.albumArtResponse.content)
         else:
             # fallback image
@@ -255,7 +255,7 @@ class AlbumArt():
             
 
         if self.albumIO:
-            debug('reDRAW album image')
+            debug("reDRAW album image")
 
             if displayLandscape:
                 #cleanPart(0, textPosTop, albumImageWidth, albumImageWidth + textSizeSmall)
@@ -273,7 +273,7 @@ def prepareTime(barPosition, textPosition):
     """Time elapsed / Time duration & visual bar"""
     # TODO: THIS IS SOMEHOW BULLSHIT and makes no real sense yet, has to be re-thougt
 
-    debug('=== TIME')
+    debug("=== TIME")
 
     textPosTop = textPosition[1]
     trackLength = 0
@@ -354,7 +354,7 @@ class PlayStateSymbol():
     # global textStatus
 
     def __init__(self):
-        debug('=== PLAY STATE')
+        debug("=== PLAY STATE")
         debug(textStatus)
 
         if textStatus != '' and textStatus != lastVolumioStatus.get('status'):
@@ -370,7 +370,7 @@ class VolumeText():
     """Volume text"""
     # global textVolume
     def __init__(self):
-        debug('=== VOLUME')
+        debug("=== VOLUME")
 
         if textVolume != lastVolumioStatus.get('volume'):
             self.view()
@@ -396,7 +396,7 @@ class AlbumName:
     def __init__(self):
         self.valueTop = 115 if displayLandscape else textTopSongDetailsAlbum
 
-        debug('=== ALBUM NAME')
+        debug("=== ALBUM NAME")
     
         if volumioStatus.get('album') != lastVolumioStatus.get('album'):
             self.view()
@@ -416,7 +416,7 @@ class ArtistName:
     def __init__(self):
         self.valueTop = 85 if displayLandscape else textTopSongDetailsArtist
 
-        debug('=== ARTIST NAME')
+        debug("=== ARTIST NAME")
 
         if volumioStatus.get('artist') != lastVolumioStatus.get('artist'):
             self.view()
@@ -441,7 +441,7 @@ class SongTitle:
         self.textTitle = textTitle # set globally
         self.maxTitleLength = 125
 
-        debug('=== SONG TITLE')
+        debug("=== SONG TITLE")
 
         if volumioStatus.get('title') != lastVolumioStatus.get('title'):
             self.view()
@@ -452,7 +452,7 @@ class SongTitle:
 
         # shorten title length to prevent visual overflow
         if len(self.textTitle) > self.maxTitleLength:
-            self.textTitle = self.textTitle[:self.maxTitleLength] + '...'
+            self.textTitle = self.textTitle[:self.maxTitleLength] + "..."
 
         if displayLandscape:
             # clean out song title data part
@@ -462,18 +462,57 @@ class SongTitle:
             # clean out song title data part
             cleanPart(0, self.valueTop, TFT.width -1, TFT.height - coverSize -1)
             draw.textwrapped((displayMargin, self.valueTop), self.textTitle, 25, lineHeightBig, fontBig, colorSongtitle)
+        
+# quick smash: queue length and position, random, repeat, repeatSingle
+class QueueState:
+    """show information about the current queue"""
+    def __init__(self):
+        self.localhost = localhost # set globally
+        self.queueStringPos = (displayMargin, 37 if displayLandscape else 62)
+        self.queueStringWdt = 240 if displayLandscape else 160 # same as barWidth for time display
+        self.queueString = []
+
+        debug("=== QUEUE STATE")
+
+        if (
+            volumioStatus.get('position') != lastVolumioStatus.get('position')
+            or volumioStatus.get('random') != lastVolumioStatus.get('random')
+            or volumioStatus.get('repeat') != lastVolumioStatus.get('repeat')
+            or volumioStatus.get('repeatSingle') != lastVolumioStatus.get('repeatSingle')
+        ):
+            self.view()
+
+    def view(self):
+        self.queueString.append(str(volumioStatus.get('position') + 1)) # queue position
+        self.queueString.append(' / ')
+        self.queueString.append(str(len(RequestGet(self.localhost + '/api/v1/getQueue').json().get('queue')))) # get queue length
+
+        # TODO: show icons for random and repeat at the right instead of text
+        if volumioStatus.get('random'):
+            self.queueString.append(u"• RND")
+
+        if volumioStatus.get('repeat'):
+            self.queueString.append(u"• REP")
+            if volumioStatus.get('repeatSingle'):
+                self.queueString.append("1")
+            else:
+                self.queueString.append("ALL")
+
+
+        cleanPart(self.queueStringPos[0], self.queueStringPos[1], self.queueStringWdt, self.queueStringPos[1] + textSizeSmall)
+        draw.textwrapped(self.queueStringPos, " ".join(self.queueString), 30, lineHeightNormal, fontSmall, colorTime)
 
 class FilestreamInfo:
     """File/Stream data (icon, bitrate)"""
     def __init__(self):
-        self.fileData = ''
+        self.fileData = ""
         self.valueLeft = displayMargin + (0 if displayLandscape else coverSize)
         self.valueTop = ((TFT.width if displayLandscape else TFT.height) - (displayMargin * (3 if showUpsInfo else 2)) - (textSizeSmall * (3 if showUpsInfo else 2))) + (6 if showUpsInfo else 3)
         self.width = (237 if displayLandscape else TFT.width) - 1
         self.view()
 
     def view(self):
-        debug('=== FILE STREAM INFO')
+        debug("=== FILE STREAM INFO")
 
         if volumioStatus.get('bitdepth'):
             self.fileData = str(volumioStatus.get('bitdepth'))
@@ -487,18 +526,18 @@ class FilestreamInfo:
 
         # Webradio
         if volumioStatus.get('bitdepth') == '' and volumioStatus.get('samplerate') == '' and volumioStatus.get('service') == 'webradio':
-            self.fileData = 'Stream: ' + str(volumioStatus.get('bitrate'))
+            self.fileData = "Stream: " + str(volumioStatus.get('bitrate'))
 
         if (volumioStatus.get('trackType') and volumioStatus.get('trackType') != lastVolumioStatus.get('trackType')) or (volumioStatus.get('stream') and volumioStatus.get('stream') != lastVolumioStatus.get('stream')):
             # clean out file stream icon part
             cleanPart(self.valueLeft, self.valueTop, self.width, self.valueTop + lineHeightSmall)
 
             if volumioStatus.get('trackType') and volumioStatus.get('trackType') != 'webradio':
-                draw.pasteimage(currentDir + "/img/format-icons/" + volumioStatus.get('trackType').lower() + ".png", (self.valueLeft, self.valueTop), True);
+                draw.pasteimage(currentDir + "/img/format-icons/" + volumioStatus.get('trackType').lower() + ".png", (self.valueLeft, self.valueTop), True)
             elif volumioStatus.get('stream') and volumioStatus.get('stream') != True:
-                draw.pasteimage(currentDir + "/img/format-icons/" + volumioStatus.get('stream').lower() + ".png", (self.valueLeft, self.valueTop), True);
+                draw.pasteimage(currentDir + "/img/format-icons/" + volumioStatus.get('stream').lower() + ".png", (self.valueLeft, self.valueTop), True)
             elif volumioStatus.get('service') and volumioStatus.get('service') == 'webradio':
-                draw.pasteimage(currentDir + "/img/format-icons/webradio.png", (self.valueLeft, self.valueTop), True);
+                draw.pasteimage(currentDir + "/img/format-icons/webradio.png", (self.valueLeft, self.valueTop), True)
         else:
             # clean out file stream text part
             cleanPart(self.valueLeft + maxWidthSourceIcon + displayMargin, self.valueTop, self.width, self.valueTop + lineHeightSmall)
@@ -516,16 +555,16 @@ class NetworkInfo:
         self.view()
 
     def view(self):
-        debug('=== NETWORK INFO')
+        debug("=== NETWORK INFO")
 
         # clean out network data part
         cleanPart(self.valueLeft, self.valueTop, self.width, self.valueTop + lineHeightSmall)
 
         if iface and iface != None and ipaddress:
-            draw.pasteimage(currentDir + "/img/connection/" + iface + ".png", (self.valueLeft, self.valueTop), True);
-            draw.textwrapped(((self.valueLeft + maxWidthSourceIcon + displayMargin), self.valueTop +1), ipaddress + ' (' + iface + ')', 30, lineHeightSmall, fontSmall, colorStatus)
+            draw.pasteimage(currentDir + "/img/connection/" + iface + ".png", (self.valueLeft, self.valueTop), True)
+            draw.textwrapped(((self.valueLeft + maxWidthSourceIcon + displayMargin), self.valueTop +1), ipaddress + " (" + iface + ")", 30, lineHeightSmall, fontSmall, colorStatus)
         else:
-            draw.textwrapped(((self.valueLeft + maxWidthSourceIcon + displayMargin), self.valueTop +1), 'Keine IP', 30, lineHeightSmall, fontSmall, colorStatus)
+            draw.textwrapped(((self.valueLeft + maxWidthSourceIcon + displayMargin), self.valueTop +1), "Keine IP", 30, lineHeightSmall, fontSmall, colorStatus)
 
 class BatteryInfo():
     """UPS capacity icon and text"""
@@ -549,7 +588,7 @@ class BatteryInfo():
         cleanPart(self.valueLeft, self.valueTop, self.width, self.valueTop + lineHeightSmall)
 
         drawCapacitySymbol(upsCapacityInt)
-        upsStatusString = '{:.0f}'.format(self.cpuTemperatureInt) + u'°' + 'C '+ u'•' + ' {:.2f}'.format(self.upsVoltageInt) + "V "+ u'•' + " " + str(upsCapacityInt) + "%"
+        upsStatusString = "{:.0f}".format(self.cpuTemperatureInt) + u"°" + "C " + u"•" + " {:.2f}".format(self.upsVoltageInt) + "V " + u"•" + " " + str(upsCapacityInt) + "%"
         draw.textwrapped(((self.valueLeft + maxWidthSourceIcon + displayMargin), self.valueTop +1), upsStatusString, 30, lineHeightSmall, fontSmall, colorStatus)
 
         lastUpsCapacityInt = upsCapacityInt
@@ -583,16 +622,16 @@ def readStatus():
 def drawCapacitySymbol(percent):
     status = readStatus()
 
-    debug('=== BATTERY SYMBOL')
+    debug("=== BATTERY SYMBOL")
 
     left = displayMargin + (0 if displayLandscape else coverSize)
     top = (TFT.width if displayLandscape else TFT.height) - 15
 
     if status < 1024:
         draw.pasteimage(currentDir + "/img/battery-horizontal-charging.png", (left, top), True)
-        debug('AC Power Connected 3A Charging')
+        debug("AC Power Connected 3A Charging")
     else:
-        debug('No power connected')
+        debug("No power connected")
         imagePercent = 100
 
         if percent >= 0 and percent < 25:
@@ -609,6 +648,7 @@ def drawView():
     AlbumArt() # takes 2% of cpu
     PlayStateSymbol()
     VolumeText()
+    QueueState()
     prepareTime(76 if displayLandscape else 78, (displayMargin, 60 if displayLandscape else 85)) # barPosition, text: (left, top)
     AlbumName()
     ArtistName()
@@ -621,14 +661,12 @@ def drawView():
 
 
 def debug(*args):
-    """
-    Debug: prints the concatenated args
-    """
+    """Debug: prints the concatenated args"""
     if (debugOutput):
         lst=[]
         for arg in args:
             lst.append(str(arg))
-        print ' '.join(lst)
+        print " ".join(lst)
 
 
 def log2file(error):
@@ -659,7 +697,7 @@ def display(name, delay, run_event):
 
             if volumioStatus != lastVolumioStatus or (showUpsInfo and upsCapacityInt != lastUpsCapacityInt):
                 if volumioStatus.get('status'):
-                    textStatus = str(volumioStatus['status'])
+                    textStatus = str(volumioStatus.get('status'))
                     textVolume = str(volumioStatus.get('volume'))
 
                     # get some global values from volumio status
