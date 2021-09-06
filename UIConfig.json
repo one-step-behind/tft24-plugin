@@ -56,7 +56,7 @@
           "id": "ups",
           "element": "switch",
           "label": "TRANSLATE.CONNECTION.UPS",
-          "description": "TRANSLATE.CONNECTION.UIOPS_DESCRIPTION",
+          "description": "TRANSLATE.CONNECTION.UPS_DESCRIPTION",
           "value": false
         },
         {
