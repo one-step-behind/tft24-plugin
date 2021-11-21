@@ -7,8 +7,9 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so.
 
+from __future__ import print_function
+
 import numbers
-import time
 
 from PIL import Image
 from PIL import ImageDraw
@@ -282,7 +283,7 @@ class TFT24T():
         """
 
         if type(color) != type((0,0,0)):
-            print "clear() function colours must be in (255,255,0) form"
+            print("clear() function colours must be in (255,255,0) form")
             exit()
         width, height = Buffer.size
         Buffer.putdata([color]*(width*height))

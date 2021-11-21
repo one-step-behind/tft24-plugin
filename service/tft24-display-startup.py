@@ -3,8 +3,9 @@
 # Python Version 2.7
 # tft24-display-startup.py
 
-PLUGIN_NAME = "tft24-display"
+from __future__ import print_function
 
+PLUGIN_NAME = "tft24-display"
 from PIL import ImageFont
 from os import path
 from spidev import SpiDev
@@ -52,7 +53,7 @@ try:
         debugOutput = bool(config['debugging']['value'])
 
 except Exception as e:
-    print "Something went wrong while getting config: " + str(e)
+    print("Something went wrong while getting config: " + str(e))
     pass
 
 
@@ -76,9 +77,9 @@ def drawStartupView():
     centerTextPositionY = (displayHeight / 2) - (startupTextDimensions[1] / 2) - 10 # calculate centerY pos based on text height
 
     if debugOutput:
-        print "disp DIM: " + str(displayWidth) + " - " + str(displayHeight)
-        print "text DIM: " + str(startupTextDimensions[0]) + " - " + str(startupTextDimensions[1])
-        print "posi DIM: " + str(centerTextPositionX) + " - " + str(centerTextPositionY)
+        print("disp DIM: " + str(displayWidth) + " - " + str(displayHeight))
+        print("text DIM: " + str(startupTextDimensions[0]) + " - " + str(startupTextDimensions[1]))
+        print("posi DIM: " + str(centerTextPositionX) + " - " + str(centerTextPositionY))
 
     # textdirect doesn't work with landscape orientation
     TFT.textdirect((centerTextPositionX, centerTextPositionY), startupText, fontHuge, color)

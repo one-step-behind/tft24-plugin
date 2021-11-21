@@ -4,11 +4,13 @@
 # tft24-display.py
 # This is a ILI9341 driven LCD display.
 
+from __future__ import print_function
+
 PLUGIN_NAME = "tft24-display"
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import ImageFont
 from StringIO import StringIO
-from os import system, path
+from os import path
 from time import sleep
 from math import ceil
 from gpiozero import CPUTemperature
@@ -674,7 +676,7 @@ def debug(*args):
         lst=[]
         for arg in args:
             lst.append(str(arg))
-        print " ".join(lst)
+        print(" ".join(lst))
 
 
 def log2file(error):
@@ -686,8 +688,6 @@ def log2file(error):
 # Display function which runs in a thread
 def display(name, delay, run_event):
     global volumioStatus, lastVolumioStatus, textStatus, textArtist, textTitle, textAlbum, textVolume, upsCapacityInt
-
-    #print "im running once"
 
     while run_event.is_set():
         tmpVolumioStatus = check_output(['volumio', 'status'])
