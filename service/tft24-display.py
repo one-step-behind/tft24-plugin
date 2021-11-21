@@ -477,18 +477,12 @@ class QueueState:
         debug("=== QUEUE STATE")
 
         if (
-<<<<<<< HEAD
-=======
             volumioStatus.get('position') and (
->>>>>>> 1e51ee4 (add queue info, turn another function into a class, string double quotes)
             volumioStatus.get('position') != lastVolumioStatus.get('position')
             or volumioStatus.get('random') != lastVolumioStatus.get('random')
             or volumioStatus.get('repeat') != lastVolumioStatus.get('repeat')
             or volumioStatus.get('repeatSingle') != lastVolumioStatus.get('repeatSingle')
-<<<<<<< HEAD
-=======
             )
->>>>>>> 1e51ee4 (add queue info, turn another function into a class, string double quotes)
         ):
             self.view()
 
