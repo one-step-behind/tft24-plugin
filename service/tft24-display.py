@@ -780,8 +780,8 @@ def main():
     finally:
         if drawShutdownView:
             try:
-                TFT.clear()
-                debug("display shutdown view")
+                #TFT.clear()
+                #debug("display shutdown view")
                 ShutdownView()
                 sleep(10)
                 #TFT.clear()
