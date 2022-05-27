@@ -16,7 +16,7 @@
   "dependencies": {
     "fs-extra": "^8.1.0",
     "kew": "^0.7.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.33",
     "v-conf": "^1.4.2"
   },
